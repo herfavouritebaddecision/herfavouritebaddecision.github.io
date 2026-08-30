@@ -214,6 +214,37 @@
         .sheet .bot > h2, .sheet .bot > .intro { display: none; }
         body.sheet-open { overflow: hidden; }
       }
+      .chat {
+        display: flex; flex-direction: column; gap: 8px;
+        max-height: min(58dvh, 520px); overflow: auto;
+        -webkit-overflow-scrolling: touch; padding-bottom: 8px;
+      }
+      .bubble {
+        max-width: 92%; padding: 11px 14px; border-radius: 16px;
+        font-size: 0.98rem; line-height: 1.4;
+      }
+      .bubble.bot {
+        align-self: flex-start; background: #f6efe4; color: var(--ink);
+        border-bottom-left-radius: 4px;
+      }
+      .bubble.me {
+        align-self: flex-end; background: var(--ink); color: var(--paper);
+        border-bottom-right-radius: 4px;
+      }
+      .bubble .meta { display: block; margin-top: 6px; font-size: 0.88rem; color: var(--muted); }
+      .bubble.me .meta { color: color-mix(in srgb, var(--paper) 70%, transparent); }
+      .chips-q { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+      .chips-q button, .chips-q a {
+        min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1.5px solid var(--line);
+        background: var(--paper-2); font-weight: 650; cursor: pointer; text-decoration: none; color: var(--ink);
+        display: inline-flex; align-items: center; justify-content: center;
+      }
+      .chips-q button.is-on { border-color: var(--ink); background: #f6efe4; }
+      .travel {
+        background: var(--paper-2); border-radius: 12px; padding: 12px 14px;
+        box-shadow: inset 3px 0 0 var(--accent); margin: 4px 0 8px; font-size: 0.92rem;
+      }
+      .travel b { display: block; margin-bottom: 4px; }
       .bot h2 { font-size: 1.55rem; }
       .bot .intro { color: var(--muted); margin: 8px 0 18px; font-size: 0.98rem; }
       .step-bar { display: flex; gap: 6px; margin-bottom: 18px; }
@@ -349,7 +380,7 @@
           </div>
           <div class="bot">
             <h2>Price and a visit</h2>
-            <p class="intro">Four short questions. Starting price uses published rates. I confirm the number before any work starts.</p>
+            <p class="intro">A short chat. Starting price from published rates, drive time from Manotick, then a slot on the day I’m already in your end of town.</p>
             <div class="step-bar" id="step-bar" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
             <div id="panel"></div>
           </div>
@@ -398,6 +429,24 @@
           { id: "east", label: "East", days: [4], places: "Orleans, Gloucester" },
           { id: "central", label: "Ottawa centre", days: [5], places: "Ottawa" }
         ];
+        const PLACES = [
+          { id: "manotick", name: "Manotick", area: "south", drive: "5–10 min", km: "local" },
+          { id: "rsouth", name: "Riverside South", area: "south", drive: "10–15 min", km: "~12 km" },
+          { id: "barrhaven", name: "Barrhaven", area: "south", drive: "15–20 min", km: "~18 km" },
+          { id: "greely", name: "Greely", area: "south", drive: "15–20 min", km: "~16 km" },
+          { id: "ngower", name: "North Gower", area: "south", drive: "15–20 min", km: "~16 km" },
+          { id: "osgoode", name: "Osgoode", area: "south", drive: "20–25 min", km: "~22 km" },
+          { id: "metcalfe", name: "Metcalfe", area: "south", drive: "20–25 min", km: "~22 km" },
+          { id: "richmond", name: "Richmond", area: "west", drive: "20–25 min", km: "~22 km" },
+          { id: "nepean", name: "Nepean", area: "nepean", drive: "20–30 min", km: "~25 km" },
+          { id: "stittsville", name: "Stittsville", area: "west", drive: "30–35 min", km: "~32 km" },
+          { id: "ottawa", name: "Central Ottawa", area: "central", drive: "25–35 min", km: "~30 km" },
+          { id: "kanata", name: "Kanata", area: "west", drive: "30–40 min", km: "~35 km" },
+          { id: "gloucester", name: "Gloucester", area: "east", drive: "30–40 min", km: "~35 km" },
+          { id: "orleans", name: "Orleans", area: "east", drive: "40–50 min", km: "~45 km" },
+          { id: "other", name: "Other / not sure", area: "south", drive: "within 60 km", km: "ask" }
+        ];
+        const DAYNAME = ["", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
         const SLOTS = [
           { id: "am", label: "8:30–11:00" },
           { id: "mid", label: "11:00–2:00" },
@@ -411,7 +460,9 @@
           doorKind: null,
           doorIssue: null,
           mesh: "standard",
+          place: null,
           area: null,
+          offRoute: false,
           date: null,
           slot: null,
           name: "",
@@ -424,10 +475,35 @@
         const bar = document.getElementById("step-bar");
 
         function setBar(n) {
-          [...bar.children].forEach((el, i) => el.classList.toggle("on", i <= n));
+          const i = Math.min(3, Math.max(0, n));
+          [...bar.children].forEach((el, k) => el.classList.toggle("on", k <= i));
         }
-        function choice(label, sub, on, fn) {
-          return `<button type="button" class="choice ${on ? "is-on" : ""}">${label}${sub ? `<small>${sub}</small>` : ""}</button>`;
+        function placeObj() { return PLACES.find((p) => p.id === state.place); }
+        function areaObj() {
+          const p = placeObj();
+          return AREAS.find((a) => a.id === (state.area || p?.area));
+        }
+        function jobLine() {
+          if (state.job === "windows") return `Window rescreen × ${state.qty || 1}${state.mesh && state.mesh !== "standard" ? " · " + state.mesh : ""}`;
+          if (state.job === "door") return `Screen door (${state.doorKind || "—"}${state.doorIssue ? ", " + state.doorIssue : ""})`;
+          if (state.job === "porch") return "Patio / porch / enclosure";
+          if (state.job === "boat") return "Boat, RV, or trailer";
+          return "";
+        }
+        function travel() {
+          const p = placeObj();
+          const a = areaObj();
+          if (!p || !a) return null;
+          const day = DAYNAME[a.days[0]];
+          return {
+            drive: p.drive,
+            km: p.km,
+            day,
+            onRoute: !state.offRoute,
+            line: state.offRoute
+              ? `Typical drive from Manotick: ${p.drive}. That’s off my usual ${day} ${a.label} run. Same $120 visit minimum — I’ll confirm by text if I can fit a special trip.`
+              : `Typical drive from Manotick: ${p.drive}. ${day}s I’m already in ${a.label}, so this is on the route. The $120 visit minimum covers coming to you. No extra mileage on the bill.`
+          };
         }
 
         function price() {
@@ -439,23 +515,23 @@
               kind: "range",
               text: n === 1 ? "from $120" : `from $${low}`,
               detail: n === 1
-                ? "$120 for one window rescreen, $120 visit minimum."
-                : `${n === 3 ? "3–4 windows, from $360" : n + " × $120 starting = $" + low}. $120 visit minimum.`
+                ? "$120 for one window rescreen. $120 visit minimum covers the trip."
+                : `${n === 3 ? "3–4 windows, from $360" : n + " × $120 starting = $" + low}. $120 visit minimum covers the trip.`
             };
           }
           if (state.job === "door") {
-            if (state.doorIssue === "mesh") return { kind: "range", text: "$150–$250", detail: "Mesh-only screen door jobs usually land in this band. Size can move it." };
-            if (state.doorIssue === "frame") return { kind: "range", text: "$250–$500", detail: "Frame, track, or replacement work. I confirm after I see it." };
+            if (state.doorIssue === "mesh") return { kind: "range", text: "$150–$250", detail: "Mesh-only screen door jobs usually land here. Size can move it. $120 visit minimum is already inside this." };
+            if (state.doorIssue === "frame") return { kind: "range", text: "$250–$500", detail: "Frame, track, or replacement. I confirm after I see it." };
             return { kind: "range", text: "$150–$500", detail: "Screen door repair or replacement, depending on size and damage." };
           }
           if (state.job === "porch" || state.job === "boat") {
-            return { kind: "photo", text: "Photo quote", detail: "This isn’t a one-price job. Text a photo and I’ll price it before I come." };
+            return { kind: "photo", text: "Photo quote", detail: "Not a one-price job. Text a photo and I’ll price it before I come. Visit still uses the $120 minimum." };
           }
           return { kind: "none", text: "", detail: "" };
         }
 
-        function nextDays(area) {
-          const want = area ? area.days : [1, 2, 3, 4, 5];
+        function nextDays(area, anyDay) {
+          const want = anyDay || !area ? [1, 2, 3, 4, 5] : area.days;
           const out = [];
           const d = new Date();
           d.setHours(12, 0, 0, 0);
@@ -465,7 +541,7 @@
             const wd = t.getDay();
             if (want.includes(wd)) {
               const areaMatch = AREAS.find((a) => a.days.includes(wd));
-              out.push({ date: t, area: areaMatch });
+              out.push({ date: t, area: areaMatch, onRoute: area ? area.days.includes(wd) : true });
             }
           }
           return out;
@@ -473,6 +549,13 @@
 
         function fmtDay(d) {
           return d.toLocaleDateString("en-CA", { weekday: "long", month: "short", day: "numeric" });
+        }
+        function escAttr(s) {
+          return String(s || "").replace(/[&<"]/g, function (c) {
+            if (c === "&") return "&amp;";
+            if (c === "<") return "&lt;";
+            return "&quot;";
+          });
         }
         function isoDate(d) {
           const y = d.getFullYear();
@@ -493,25 +576,24 @@
 
         function summary() {
           const p = price();
-          const area = AREAS.find((a) => a.id === state.area);
-          const jobLabel = {
-            windows: `Window rescreen × ${state.qty || 1}`,
-            door: `Screen door (${state.doorKind || "unspecified"}, ${state.doorIssue || "unspecified"})`,
-            porch: "Patio / porch / enclosure",
-            boat: "Boat, RV, or trailer"
-          }[state.job] || "Screen work";
+          const a = areaObj();
+          const pl = placeObj();
+          const tr = travel();
           const when = state.date ? `${fmtDay(state.date)} · ${SLOTS.find((s) => s.id === state.slot)?.label || ""}` : "not picked";
           return [
-            `Job: ${jobLabel}`,
+            `Job: ${jobLine()}`,
             `Mesh: ${state.mesh}`,
-            `Area: ${area ? area.label + " — " + area.places : ""}`,
+            `Place: ${pl ? pl.name : ""}`,
+            `Area: ${a ? a.label + " — " + a.places : ""}`,
+            `Drive from Manotick (typical): ${tr ? tr.drive : ""}`,
+            `On usual route: ${tr && tr.onRoute ? "yes" : "special trip — confirm"}`,
             `Visit: ${when}`,
             `Starting price: ${p.text}`,
             `Name: ${state.name}`,
             `Phone: ${state.phone}`,
             state.email ? `Email: ${state.email}` : "",
             state.note ? `Note: ${state.note}` : "",
-            "Price is a starting number from published rates. Confirm before work. Customer will text a photo to 613-797-4958 to lock it."
+            "Price is a starting number from published rates. $120 visit minimum covers the trip within 60 km. Confirm before work. Customer will text a photo to 613-797-4958 to lock it."
           ].filter(Boolean).join("\n");
         }
 
@@ -525,7 +607,7 @@
           const t = slotTimes(state.date, state.slot);
           const title = encodeURIComponent(`The Screen Guy — ${state.name}`);
           const details = encodeURIComponent(summary());
-          const loc = encodeURIComponent(AREAS.find((a) => a.id === state.area)?.places || "Ottawa");
+          const loc = encodeURIComponent((placeObj()?.name || "") + " / " + (areaObj()?.places || "Ottawa"));
           window.open(
             `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${t.s}/${t.e}&details=${details}&location=${loc}`,
             "_blank"
@@ -546,7 +628,7 @@
             `DTEND;TZID=America/Toronto:${t.e}`,
             `SUMMARY:The Screen Guy — ${state.name}`,
             `DESCRIPTION:${summary().replace(/\n/g, "\\n")}`,
-            `LOCATION:${AREAS.find((a) => a.id === state.area)?.places || "Ottawa"}`,
+            `LOCATION:${placeObj()?.name || areaObj()?.places || "Ottawa"}`,
             "END:VEVENT",
             "END:VCALENDAR"
           ].join("\r\n");
@@ -557,147 +639,212 @@
           a.click();
         }
 
+        function bubbles(lines) {
+          return `<div class="chat" id="chat">${lines.map((l) => `<div class="bubble ${l.who}">${l.text}${l.meta ? `<span class="meta">${l.meta}</span>` : ""}</div>`).join("")}</div>`;
+        }
+        function scrollChat() {
+          const el = panel.querySelector("#chat");
+          if (el) el.scrollTop = el.scrollHeight;
+        }
+        function chipRow(items, handler) {
+          const wrap = document.createElement("div");
+          wrap.className = "chips-q";
+          items.forEach((it) => {
+            const b = document.createElement(it.href ? "a" : "button");
+            b.type = it.href ? undefined : "button";
+            if (it.href) b.href = it.href;
+            b.textContent = it.label;
+            if (it.on) b.classList.add("is-on");
+            if (!it.href) b.onclick = it.fn || (() => handler(it.id));
+            wrap.appendChild(b);
+          });
+          return wrap;
+        }
+
         function render() {
-          setBar(state.step);
+          setBar(state.step <= 1 ? 0 : state.step === 2 ? 1 : state.step === 3 ? 2 : 3);
+          const lines = [];
+          lines.push({ who: "bot", text: "What’s torn? I’ll price it from published rates, then put you on a day I’m already in your end of town." });
+          if (state.job) lines.push({ who: "me", text: { windows: "Window screens", door: "Screen door", porch: "Patio, porch, enclosure", boat: "Boat, RV, or trailer" }[state.job] });
+
           if (state.step === 0) {
-            panel.innerHTML = `
-              <p class="q">What’s torn?</p>
-              <div class="choices">
-                ${choice("Window screens", "Rescreen existing frames, from $120 each", state.job === "windows")}
-                ${choice("Screen door", "Sliding or hinged, $150–$500", state.job === "door")}
-                ${choice("Patio, porch, enclosure", "Needs a photo", state.job === "porch")}
-                ${choice("Boat, RV, or trailer", "Needs a photo", state.job === "boat")}
-              </div>`;
-            [...panel.querySelectorAll(".choice")].forEach((btn, i) => {
-              const ids = ["windows", "door", "porch", "boat"];
-              btn.onclick = () => { state.job = ids[i]; state.step = 1; render(); };
-            });
+            panel.innerHTML = bubbles(lines) + `<p class="q">Pick one</p>`;
+            panel.appendChild(chipRow([
+              { id: "windows", label: "Window screens" },
+              { id: "door", label: "Screen door" },
+              { id: "porch", label: "Patio / porch / enclosure" },
+              { id: "boat", label: "Boat, RV, trailer" }
+            ], (id) => { state.job = id; state.step = 1; render(); }));
+            const back = document.createElement("div");
+            back.className = "nav-row";
+            back.style.marginTop = "12px";
+            panel.appendChild(back);
+            scrollChat();
             return;
+          }
+
+          if (state.job === "windows" && state.qty) {
+            lines.push({ who: "bot", text: "How many windows, and which mesh?" });
+            lines.push({ who: "me", text: `${state.qty === 5 ? "5 or more" : state.qty === 3 ? "3–4" : state.qty} · ${state.mesh === "pet" ? "pet-resistant" : state.mesh === "solar" ? "solar" : "standard premium"}` });
+          }
+          if (state.job === "door" && state.doorKind && state.doorIssue) {
+            lines.push({ who: "bot", text: "What kind of door, and what’s wrong?" });
+            lines.push({ who: "me", text: `${state.doorKind}, ${state.doorIssue === "mesh" ? "mesh only" : "frame / replace"}` });
+          }
+          if ((state.job === "porch" || state.job === "boat") && state.step >= 2) {
+            lines.push({ who: "bot", text: "That one needs a photo so I don’t guess." });
+            lines.push({ who: "me", text: "I’ll send a photo" });
           }
 
           if (state.step === 1) {
             if (state.job === "windows") {
-              panel.innerHTML = `
-                <p class="q">How many windows?</p>
-                <div class="choices">
-                  ${choice("1", "from $120", state.qty === 1)}
-                  ${choice("2", "from $240", state.qty === 2)}
-                  ${choice("3–4", "from $360", state.qty === 3)}
-                  ${choice("5 or more", "I’ll price after a photo", state.qty === 5)}
-                </div>
-                <p class="q" style="margin-top:16px">Mesh</p>
-                <div class="choices">
-                  ${choice("Standard premium", "What I usually install", state.mesh === "standard")}
-                  ${choice("Pet-resistant", "Priced after I see the opening", state.mesh === "pet")}
-                  ${choice("Solar / sun-blocking", "Priced after I see the opening", state.mesh === "solar")}
-                </div>
-                <div class="nav-row"><button type="button" class="btn btn-ghost" id="back">Back</button></div>`;
-              const qtys = [1, 2, 3, 5];
-              [...panel.querySelectorAll(".choices")[0].querySelectorAll(".choice")].forEach((btn, i) => {
-                btn.onclick = () => { state.qty = qtys[i]; render(); };
-              });
-              ["standard", "pet", "solar"].forEach((id, i) => {
-                panel.querySelectorAll(".choices")[1].querySelectorAll(".choice")[i].onclick = () => { state.mesh = id; render(); };
-              });
-              panel.querySelector("#back").onclick = () => { state.step = 0; render(); };
+              panel.innerHTML = bubbles(lines) + `<p class="q">How many windows?</p>`;
+              panel.appendChild(chipRow([
+                { id: 1, label: "1 · from $120", on: state.qty === 1 },
+                { id: 2, label: "2 · from $240", on: state.qty === 2 },
+                { id: 3, label: "3–4 · from $360", on: state.qty === 3 },
+                { id: 5, label: "5+ · photo quote", on: state.qty === 5 }
+              ], (id) => { state.qty = id; render(); }));
+              const q2 = document.createElement("p");
+              q2.className = "q";
+              q2.style.marginTop = "14px";
+              q2.textContent = "Mesh";
+              panel.appendChild(q2);
+              panel.appendChild(chipRow([
+                { id: "standard", label: "Standard premium", on: state.mesh === "standard" },
+                { id: "pet", label: "Pet-resistant", on: state.mesh === "pet" },
+                { id: "solar", label: "Solar / sun-block", on: state.mesh === "solar" }
+              ], (id) => { state.mesh = id; render(); }));
+              const row = document.createElement("div");
+              row.className = "nav-row";
+              row.innerHTML = `<button type="button" class="btn btn-ghost" id="back">Back</button>`;
+              panel.appendChild(row);
+              panel.querySelector("#back").onclick = () => { state.step = 0; state.job = null; state.qty = null; render(); };
               if (state.qty) {
-                const row = panel.querySelector(".nav-row");
                 const n = document.createElement("button");
                 n.className = "btn btn-primary";
                 n.textContent = "Next";
                 n.onclick = () => { state.step = 2; render(); };
                 row.appendChild(n);
               }
+              scrollChat();
               return;
             }
             if (state.job === "door") {
-              panel.innerHTML = `
-                <p class="q">What kind of door?</p>
-                <div class="choices">
-                  ${choice("Sliding", "", state.doorKind === "sliding")}
-                  ${choice("Hinged", "", state.doorKind === "hinged")}
-                </div>
-                <p class="q" style="margin-top:16px">What’s wrong?</p>
-                <div class="choices">
-                  ${choice("Mesh torn — frame is fine", "$150–$250 starting", state.doorIssue === "mesh")}
-                  ${choice("Frame, track, or needs replacing", "$250–$500 starting", state.doorIssue === "frame")}
-                </div>
-                <div class="nav-row"><button type="button" class="btn btn-ghost" id="back">Back</button></div>`;
-              panel.querySelectorAll(".choices")[0].querySelectorAll(".choice")[0].onclick = () => { state.doorKind = "sliding"; render(); };
-              panel.querySelectorAll(".choices")[0].querySelectorAll(".choice")[1].onclick = () => { state.doorKind = "hinged"; render(); };
-              panel.querySelectorAll(".choices")[1].querySelectorAll(".choice")[0].onclick = () => { state.doorIssue = "mesh"; render(); };
-              panel.querySelectorAll(".choices")[1].querySelectorAll(".choice")[1].onclick = () => { state.doorIssue = "frame"; render(); };
-              panel.querySelector("#back").onclick = () => { state.step = 0; render(); };
+              panel.innerHTML = bubbles(lines) + `<p class="q">What kind of door?</p>`;
+              panel.appendChild(chipRow([
+                { id: "sliding", label: "Sliding", on: state.doorKind === "sliding" },
+                { id: "hinged", label: "Hinged", on: state.doorKind === "hinged" }
+              ], (id) => { state.doorKind = id; render(); }));
+              const q2 = document.createElement("p");
+              q2.className = "q";
+              q2.style.marginTop = "14px";
+              q2.textContent = "What’s wrong?";
+              panel.appendChild(q2);
+              panel.appendChild(chipRow([
+                { id: "mesh", label: "Mesh torn · $150–$250", on: state.doorIssue === "mesh" },
+                { id: "frame", label: "Frame / replace · $250–$500", on: state.doorIssue === "frame" }
+              ], (id) => { state.doorIssue = id; render(); }));
+              const row = document.createElement("div");
+              row.className = "nav-row";
+              row.innerHTML = `<button type="button" class="btn btn-ghost" id="back">Back</button>`;
+              panel.appendChild(row);
+              panel.querySelector("#back").onclick = () => { state.step = 0; state.job = null; state.doorKind = null; state.doorIssue = null; render(); };
               if (state.doorKind && state.doorIssue) {
                 const n = document.createElement("button");
                 n.className = "btn btn-primary";
                 n.textContent = "Next";
                 n.onclick = () => { state.step = 2; render(); };
-                panel.querySelector(".nav-row").appendChild(n);
+                row.appendChild(n);
               }
+              scrollChat();
               return;
             }
-            panel.innerHTML = `
-              <p class="q">This one needs a photo.</p>
-              <p class="intro">Porches, enclosures, boats, RVs and trailers aren’t a one-number job. Text a picture to ${PHONE} and I’ll price it, then we pick a day.</p>
-              <div class="nav-row">
-                <button type="button" class="btn btn-ghost" id="back">Back</button>
-                <a class="btn btn-primary" href="sms:${TEL}">Text a photo</a>
-              </div>`;
-            panel.querySelector("#back").onclick = () => { state.step = 0; render(); };
+            panel.innerHTML = bubbles(lines.concat([{ who: "bot", text: "Porches, enclosures, boats, RVs and trailers aren’t a one-number job. Text a picture and I’ll price it. You can still pick a visit day." }]));
+            const row = document.createElement("div");
+            row.className = "chips-q";
+            row.innerHTML = `<a href="sms:${TEL}">Text a photo</a>`;
+            panel.appendChild(row);
+            const nav = document.createElement("div");
+            nav.className = "nav-row";
+            nav.innerHTML = `<button type="button" class="btn btn-ghost" id="back">Back</button><button type="button" class="btn btn-primary" id="go">Pick a day anyway</button>`;
+            panel.appendChild(nav);
+            panel.querySelector("#back").onclick = () => { state.step = 0; state.job = null; render(); };
+            panel.querySelector("#go").onclick = () => { state.step = 2; render(); };
+            scrollChat();
             return;
+          }
+
+          if (state.place) {
+            const p = placeObj();
+            lines.push({ who: "bot", text: "Where should I come?" });
+            lines.push({ who: "me", text: p.name });
           }
 
           if (state.step === 2) {
-            panel.innerHTML = `
-              <p class="q">Where are you?</p>
-              <div class="choices one">
-                ${AREAS.map((a) => choice(a.label, a.places + " · " + ["", "Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays"][a.days[0]], state.area === a.id)).join("")}
-              </div>
-              <div class="nav-row"><button type="button" class="btn btn-ghost" id="back">Back</button></div>`;
-            [...panel.querySelectorAll(".choice")].forEach((btn, i) => {
-              btn.onclick = () => { state.area = AREAS[i].id; state.date = null; state.slot = null; render(); };
-            });
+            panel.innerHTML = bubbles(lines) + `<p class="q">Neighbourhood</p>`;
+            panel.appendChild(chipRow(PLACES.map((p) => ({ id: p.id, label: p.name, on: state.place === p.id })), (id) => {
+              const p = PLACES.find((x) => x.id === id);
+              state.place = id;
+              state.area = p.area;
+              state.date = null;
+              state.slot = null;
+              state.offRoute = false;
+              render();
+            }));
+            const nav = document.createElement("div");
+            nav.className = "nav-row";
+            nav.innerHTML = `<button type="button" class="btn btn-ghost" id="back">Back</button>`;
+            panel.appendChild(nav);
             panel.querySelector("#back").onclick = () => { state.step = 1; render(); };
-            if (state.area) {
+            if (state.place) {
               const n = document.createElement("button");
               n.className = "btn btn-primary";
-              n.textContent = "Pick a day";
+              n.textContent = "See price and days";
               n.onclick = () => { state.step = 3; render(); };
-              panel.querySelector(".nav-row").appendChild(n);
+              nav.appendChild(n);
             }
+            scrollChat();
             return;
           }
 
-          if (state.step === 3) {
-            const area = AREAS.find((a) => a.id === state.area);
-            const days = nextDays(area);
-            const p = price();
-            panel.innerHTML = `
-              <div class="estimate">
-                <div class="k">Starting price</div>
-                <div class="n">${p.text}</div>
-                <p>${p.detail} Exact price confirmed before any work starts.</p>
-              </div>
-              <p class="q">Next ${area.label} days</p>
-              <div class="days">
-                ${days.map((d, i) => `<button type="button" class="day ${state.date && isoDate(state.date) === isoDate(d.date) ? "is-on" : ""}">${fmtDay(d.date)}<small>${d.area.places}</small></button>`).join("")}
-              </div>
-              <div class="slots" id="slots"></div>
-              <div class="field" style="margin-top:16px"><label for="nm">Name</label><input id="nm" autocomplete="name" value="${state.name}" /></div>
-              <div class="field"><label for="ph">Phone</label><input id="ph" type="tel" autocomplete="tel" inputmode="tel" value="${state.phone}" /></div>
-              <div class="field"><label for="em">Email <span class="hint">(optional)</span></label><input id="em" type="email" autocomplete="email" value="${state.email}" /></div>
-              <div class="field"><label for="nt">Anything I should know?</label><textarea id="nt">${state.note}</textarea></div>
-              <p class="err" id="err" hidden>Pick a day, a time window, and leave a name and phone.</p>
-              <div class="nav-row">
-                <button type="button" class="btn btn-ghost" id="back">Back</button>
-                <button type="button" class="btn btn-primary" id="hold">Hold this visit</button>
-              </div>`;
-            [...panel.querySelectorAll(".day")].forEach((btn, i) => {
-              btn.onclick = () => { state.date = days[i].date; render(); };
+          const p = price();
+          const tr = travel();
+          const a = areaObj();
+          if (state.step >= 3 && p.text) {
+            lines.push({
+              who: "bot",
+              text: `Starting price: <b>${p.text}</b>`,
+              meta: p.detail + " Exact price confirmed before any work starts."
             });
-            const slotBox = panel.querySelector("#slots");
+            if (tr) lines.push({ who: "bot", text: tr.line });
+          }
+
+          if (state.step === 3) {
+            const days = nextDays(a, state.offRoute);
+            panel.innerHTML = bubbles(lines);
+            const trav = document.createElement("div");
+            trav.className = "travel";
+            trav.innerHTML = `<b>Behind the number</b>${tr ? tr.line : ""} Drive times are typical from Manotick, not live traffic. I don’t add a per-kilometre fee inside 60 km.`;
+            panel.appendChild(trav);
+            const q = document.createElement("p");
+            q.className = "q";
+            q.textContent = state.offRoute ? "Any weekday (special trip)" : `Next ${a.label} days — I’m already there`;
+            panel.appendChild(q);
+            const daysBox = document.createElement("div");
+            daysBox.className = "days";
+            days.forEach((d) => {
+              const b = document.createElement("button");
+              b.type = "button";
+              b.className = "day" + (state.date && isoDate(state.date) === isoDate(d.date) ? " is-on" : "");
+              b.innerHTML = `${fmtDay(d.date)}<small>${d.onRoute ? "On my " + a.label.toLowerCase() + " run" : "Special trip · I’ll confirm"} · ${d.area.places}</small>`;
+              b.onclick = () => { state.date = d.date; state.offRoute = !d.onRoute; state.slot = null; render(); };
+              daysBox.appendChild(b);
+            });
+            panel.appendChild(daysBox);
             if (state.date) {
+              const slotBox = document.createElement("div");
+              slotBox.className = "slots";
               SLOTS.forEach((s) => {
                 const b = document.createElement("button");
                 b.type = "button";
@@ -706,7 +853,27 @@
                 b.onclick = () => { state.slot = s.id; render(); };
                 slotBox.appendChild(b);
               });
+              panel.appendChild(slotBox);
             }
+            const alt = document.createElement("div");
+            alt.className = "chips-q";
+            alt.style.marginTop = "10px";
+            const altBtn = document.createElement("button");
+            altBtn.type = "button";
+            altBtn.textContent = state.offRoute ? "Show only days I’m in your area" : "Need a different day?";
+            altBtn.onclick = () => { state.offRoute = !state.offRoute; state.date = null; state.slot = null; render(); };
+            alt.appendChild(altBtn);
+            panel.appendChild(alt);
+            panel.insertAdjacentHTML("beforeend", `
+              <div class="field" style="margin-top:16px"><label for="nm">Name</label><input id="nm" autocomplete="name" value="${escAttr(state.name)}" /></div>
+              <div class="field"><label for="ph">Phone</label><input id="ph" type="tel" autocomplete="tel" inputmode="tel" value="${escAttr(state.phone)}" /></div>
+              <div class="field"><label for="em">Email <span class="hint">(optional)</span></label><input id="em" type="email" autocomplete="email" value="${escAttr(state.email)}" /></div>
+              <div class="field"><label for="nt">Gate codes, dogs, anything I should know?</label><textarea id="nt">${escAttr(state.note)}</textarea></div>
+              <p class="err" id="err" hidden>Pick a day, a time window, and leave a name and phone.</p>
+              <div class="nav-row">
+                <button type="button" class="btn btn-ghost" id="back">Back</button>
+                <button type="button" class="btn btn-primary" id="hold">Hold this visit</button>
+              </div>`);
             const bind = (id, key) => { const el = panel.querySelector(id); el.addEventListener("input", () => { state[key] = el.value; }); };
             bind("#nm", "name"); bind("#ph", "phone"); bind("#em", "email"); bind("#nt", "note");
             panel.querySelector("#back").onclick = () => { state.step = 2; render(); };
@@ -722,16 +889,16 @@
               state.step = 4;
               render();
             };
+            scrollChat();
             return;
           }
 
-          const p = price();
-          const area = AREAS.find((a) => a.id === state.area);
-          panel.innerHTML = `
+          lines.push({ who: "me", text: `${fmtDay(state.date)} · ${SLOTS.find((s) => s.id === state.slot).label}` });
+          panel.innerHTML = bubbles(lines) + `
             <div class="estimate">
               <div class="k">Visit held as a request</div>
               <div class="n">${p.text}</div>
-              <p>${fmtDay(state.date)} · ${SLOTS.find((s) => s.id === state.slot).label}<br>${area.places}</p>
+              <p>${fmtDay(state.date)} · ${SLOTS.find((s) => s.id === state.slot).label}<br>${placeObj().name} · ${tr.drive} from Manotick${tr.onRoute ? "" : " · special trip"}</p>
             </div>
             <div class="lock">
               <p>To lock the price, text a photo of the screen to ${PHONE}.</p>
@@ -743,7 +910,7 @@
               <button type="button" class="btn btn-ghost" id="gcal">Add to Google Calendar</button>
               <button type="button" class="btn btn-ghost" id="ics">Download .ics</button>
             </div>
-            <p class="fine" style="margin-top:14px">Put the .ics on a calendar named The Screen Guy Jobs (use the business Gmail). Don’t drop customer jobs on a personal calendar.</p>
+            <p class="fine" style="margin-top:14px">Put the .ics on a calendar named The Screen Guy Jobs (business Gmail). Don’t drop customer jobs on a personal calendar.</p>
             <div class="nav-row" style="margin-top:16px">
               <button type="button" class="btn btn-ghost" id="again">New request</button>
             </div>`;
@@ -752,9 +919,11 @@
           panel.querySelector("#ics").onclick = goIcs;
           panel.querySelector("#again").onclick = () => {
             state.step = 0; state.job = null; state.qty = null; state.doorKind = null; state.doorIssue = null;
-            state.mesh = "standard"; state.area = null; state.date = null; state.slot = null;
+            state.mesh = "standard"; state.place = null; state.area = null; state.offRoute = false;
+            state.date = null; state.slot = null;
             render();
           };
+          scrollChat();
         }
 
         function placeSheet() {
