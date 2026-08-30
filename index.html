@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#1A1917" />
+    <meta name="color-scheme" content="light" />
+    <title>Window Screen Repair Ottawa | Book a visit | The Screen Guy</title>
+    <meta
+      name="description"
+      content="Mobile window screen repair Ottawa. Instant starting price, then pick a visit on the day I’m already in your end of town. From $120. Call or text 613-797-4958."
+    />
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%231A1917'/%3E%3Cpath d='M7 7h18v18H7z' fill='none' stroke='%23E24A12' stroke-width='1.5'/%3E%3Cpath d='M7 13h18M7 19h18M13 7v18M19 7v18' stroke='%23E24A12' stroke-width='.7' opacity='.85'/%3E%3C/svg%3E"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "The Screen Guy",
+        "telephone": "+1-613-797-4958",
+        "email": "otownmesh@gmail.com",
+        "priceRange": "$120+",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Manotick",
+          "addressRegion": "ON",
+          "addressCountry": "CA"
+        },
+        "areaServed": ["Ottawa", "Manotick", "Barrhaven", "Nepean", "Kanata", "Stittsville", "Orleans"],
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "5.0",
+          "bestRating": "5",
+          "reviewCount": "33"
+        }
+      }
+    </script>
+    <style>
+      :root {
+        --ink: #1a1917;
+        --ink-2: #2b2926;
+        --paper: #f4f0e8;
+        --paper-2: #fffdf8;
+        --muted: #5a554d;
+        --line: #cfc6b6;
+        --accent: #d44512;
+        --accent-deep: #b3380e;
+        --accent-soft: #f8e3d8;
+        --accent-fg: #fffdf8;
+        --ok: #2c5a3c;
+        --header-h: 58px;
+        --dock-h: 76px;
+        --gutter: 20px;
+        --wrap: 720px;
+        --radius: 14px;
+        --font: "Avenir Next", "Segoe UI", "Helvetica Neue", system-ui, sans-serif;
+        --display: Georgia, "Iowan Old Style", Palatino, serif;
+      }
+      * { box-sizing: border-box; }
+      html {
+        -webkit-text-size-adjust: 100%;
+        scroll-behavior: smooth;
+        overflow-x: clip;
+        scroll-padding-top: 120px;
+        scroll-padding-bottom: calc(var(--dock-h) + 10px);
+      }
+      body {
+        margin: 0;
+        font-family: var(--font);
+        color: var(--ink);
+        background: var(--paper);
+        font-size: 1.05rem;
+        line-height: 1.5;
+        padding-bottom: calc(var(--dock-h) + 12px + env(safe-area-inset-bottom));
+      }
+      a, button, summary, label, input, select { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+      button, input, select, textarea { font: inherit; color: inherit; }
+      h1, h2 { font-family: var(--display); font-weight: 600; letter-spacing: -0.03em; line-height: 1.12; margin: 0; text-wrap: balance; }
+      p { margin: 0; text-wrap: pretty; }
+      img { max-width: 100%; display: block; }
+      .wrap { width: min(100% - (var(--gutter) * 2), var(--wrap)); margin-inline: auto; }
+      .skip { position: absolute; left: 12px; top: -48px; z-index: 200; background: var(--accent); color: #fff; padding: 10px 14px; border-radius: 8px; }
+      .skip:focus { top: 10px; }
+      :focus { outline: none; }
+      :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+      .site-header {
+        position: sticky; top: 0; z-index: 80;
+        padding-top: env(safe-area-inset-top);
+        background: var(--ink); color: var(--paper);
+      }
+      .site-header .wrap.bar {
+        height: var(--header-h);
+        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      }
+      .switch {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
+        padding: 0 0 10px;
+      }
+      .switch a {
+        min-height: 44px;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: 650;
+        font-size: 0.92rem;
+        color: color-mix(in srgb, var(--paper) 78%, transparent);
+        background: color-mix(in srgb, var(--paper) 9%, transparent);
+      }
+      .switch a.is-on {
+        background: var(--paper);
+        color: var(--ink);
+      }
+      .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; min-height: 44px; }
+      .brand-mark { width: 30px; height: 30px; }
+      .brand b { display: block; font-size: 1rem; font-weight: 650; letter-spacing: 0; text-transform: none; opacity: 1; }
+      .brand .tag { display: block; font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.65; font-weight: 600; }
+      .header-call {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        min-height: 44px; padding: 0 14px; border-radius: 999px;
+        background: var(--accent); color: var(--accent-fg); text-decoration: none; font-weight: 650;
+      }
+      @media (min-width: 720px) {
+        .switch { width: 240px; margin-left: auto; padding-bottom: 12px; }
+      }
+
+      .hero { padding: 36px 0 28px; }
+      .hero h1 { font-size: clamp(2rem, 8vw, 3rem); max-width: 12ch; }
+      .hero .lede { margin-top: 14px; color: var(--muted); max-width: 32em; }
+      .hero-actions { display: grid; gap: 10px; margin-top: 22px; }
+      .trust {
+        display: flex; flex-wrap: wrap; gap: 8px 18px;
+        margin-top: 22px; color: var(--muted); font-size: 0.92rem;
+      }
+      .trust b { color: var(--ink); }
+
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        min-height: 52px; padding: 0 20px; border: 0; border-radius: 999px;
+        text-decoration: none; font-weight: 650; cursor: pointer; width: 100%;
+      }
+      .btn-primary { background: var(--accent); color: var(--accent-fg); }
+      .btn-ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--line); }
+      .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+      .btn:active { transform: scale(0.98); }
+
+      .bot {
+        background: var(--paper-2);
+        border-radius: 22px;
+        box-shadow: 0 0 0 1px rgba(26,25,23,0.06), 0 18px 40px -24px rgba(26,25,23,0.35);
+        padding: 22px 18px 24px;
+        margin: 8px 0 40px;
+      }
+      .sheet-chrome { display: none; }
+      .sheet-handle { display: none; }
+      .sheet {
+        border: 0;
+        padding: 0;
+        background: transparent;
+        max-width: none;
+      }
+      .sheet::backdrop { background: rgba(26, 25, 23, 0.5); }
+      .sheet-close, .sheet-call {
+        min-width: 44px; min-height: 44px;
+        display: inline-flex; align-items: center; justify-content: center;
+        border: 0; border-radius: 999px; text-decoration: none; font-weight: 650;
+        background: transparent; color: var(--ink); cursor: pointer;
+      }
+      .sheet-call { background: var(--accent); color: var(--accent-fg); padding: 0 14px; font-size: 0.9rem; }
+      .sheet-top { display: none; }
+
+      @media (max-width: 719px) {
+        .sheet {
+          width: 100%;
+          max-width: 100%;
+          margin: 0;
+          max-height: 88dvh;
+          padding: 6px 16px calc(18px + env(safe-area-inset-bottom));
+          background: var(--paper-2);
+          border-radius: 22px 22px 0 0;
+          box-shadow: 0 -16px 48px rgba(26,25,23,0.28);
+        }
+        .sheet[open] {
+          position: fixed;
+          inset: auto 0 0 0;
+          display: flex;
+          flex-direction: column;
+        }
+        .sheet-handle {
+          display: block;
+          width: 44px; height: 5px; border-radius: 99px;
+          background: var(--line); margin: 8px auto 6px; flex: 0 0 auto;
+        }
+        .sheet-top {
+          display: flex; align-items: center; gap: 8px;
+          min-height: 44px; margin-bottom: 8px; flex: 0 0 auto;
+        }
+        .sheet-top h2 { font-size: 1.2rem; flex: 1; }
+        .sheet-chrome { display: contents; }
+        .sheet .bot {
+          box-shadow: none; padding: 0; margin: 0; border-radius: 0;
+          overflow: auto; -webkit-overflow-scrolling: touch;
+          min-height: 0;
+        }
+        .sheet .bot > h2, .sheet .bot > .intro { display: none; }
+        body.sheet-open { overflow: hidden; }
+      }
+      .bot h2 { font-size: 1.55rem; }
+      .bot .intro { color: var(--muted); margin: 8px 0 18px; font-size: 0.98rem; }
+      .step-bar { display: flex; gap: 6px; margin-bottom: 18px; }
+      .step-bar i { flex: 1; height: 4px; border-radius: 99px; background: var(--line); }
+      .step-bar i.on { background: var(--accent); }
+      .q { font-weight: 650; margin-bottom: 12px; }
+      .choices { display: grid; gap: 8px; }
+      .choice {
+        display: flex; align-items: flex-start; gap: 10px; text-align: left;
+        width: 100%; min-height: 52px; padding: 12px 14px;
+        border-radius: 12px; border: 1.5px solid var(--line); background: var(--paper-2);
+        cursor: pointer; font-weight: 600;
+      }
+      .choice small { display: block; font-weight: 450; color: var(--muted); }
+      .choice.is-on { border-color: var(--ink); background: #f6efe4; }
+      .nav-row { display: grid; grid-template-columns: auto 1fr; gap: 8px; margin-top: 16px; }
+      .field { display: grid; gap: 6px; margin-bottom: 12px; }
+      .field label { font-size: 0.9rem; font-weight: 650; }
+      .field input, .field select, .field textarea {
+        width: 100%; min-height: 48px; padding: 12px 14px; font-size: 16px;
+        border: 1.5px solid var(--line); border-radius: 10px; background: var(--paper-2);
+      }
+      .field textarea { min-height: 88px; resize: vertical; }
+      .days { display: grid; gap: 8px; }
+      .day {
+        display: grid; gap: 2px; text-align: left; width: 100%;
+        padding: 12px 14px; min-height: 52px; border-radius: 12px;
+        border: 1.5px solid var(--line); background: var(--paper-2); cursor: pointer; font-weight: 650;
+      }
+      .day small { font-weight: 450; color: var(--muted); }
+      .day.is-on { border-color: var(--ink); background: #f6efe4; }
+      .slots { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 12px; }
+      .slots button { min-height: 48px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--paper-2); font-weight: 650; cursor: pointer; padding: 8px 6px; font-size: 0.88rem; }
+      .slots button.is-on { border-color: var(--ink); background: #f6efe4; }
+      .estimate {
+        background: var(--ink); color: var(--paper-2); border-radius: 16px; padding: 18px 16px 16px; margin-bottom: 14px;
+      }
+      .estimate .k { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.65; }
+      .estimate .n { font-family: var(--display); font-size: clamp(1.8rem, 6vw, 2.4rem); margin: 6px 0 8px; }
+      .estimate p { color: color-mix(in srgb, var(--paper) 78%, transparent); font-size: 0.95rem; }
+      .lock { background: var(--accent-soft); border-radius: 12px; padding: 14px 14px 14px 16px; box-shadow: inset 4px 0 0 var(--accent); margin: 12px 0; }
+      .lock p { font-weight: 650; }
+      .err { color: #8b1e12; font-size: 0.9rem; margin-top: 8px; }
+      .routes { display: grid; gap: 8px; margin: 8px 0 28px; }
+      .route { display: grid; grid-template-columns: 92px 1fr; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+      .route b { color: var(--accent-deep); }
+      .fine { color: var(--muted); font-size: 0.88rem; margin-top: 8px; }
+
+      .foot { background: var(--ink); color: var(--paper); padding: 36px 0 28px; }
+      .foot a { color: var(--paper); font-weight: 650; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+      .foot .map { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 16px 0 8px; }
+      .foot .map a { font-weight: 650; }
+
+      .dock {
+        position: fixed; left: 0; right: 0; bottom: 0; z-index: 90;
+        display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+        padding: 8px max(12px, env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+        background: color-mix(in srgb, var(--ink) 94%, transparent);
+        backdrop-filter: blur(12px);
+      }
+      .dock .btn { min-height: 48px; font-size: 0.95rem; }
+
+      @media (min-width: 720px) {
+        body { padding-bottom: 0; }
+        .dock { display: none; }
+        .hero-actions { grid-template-columns: auto auto; justify-content: start; }
+        .hero-actions .btn { width: auto; min-width: 220px; }
+        .bot { padding: 28px 28px 30px; }
+        .choices { grid-template-columns: 1fr 1fr; }
+        .choices.one { grid-template-columns: 1fr; }
+        .sheet {
+          position: static;
+          inset: auto;
+          display: block;
+          width: auto;
+          max-width: none;
+          max-height: none;
+          margin: 0;
+          padding: 0;
+          background: transparent;
+          height: auto;
+        }
+        .sheet[open] { display: block; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#quote">Skip to quote</a>
+    <header class="site-header">
+      <div class="wrap bar">
+        <a class="brand" href="index.html">
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+            <rect width="32" height="32" rx="5" fill="#F4F0E8" />
+            <rect x="6" y="6" width="20" height="20" fill="none" stroke="#1A1917" stroke-width="1.6" />
+            <path d="M6 12.7h20M6 19.3h20M12.7 6v20M19.3 6v20" stroke="#D44512" stroke-width="1" />
+          </svg>
+          <span><span class="tag">Ottawa</span><b>The Screen Guy</b></span>
+        </a>
+        <a class="header-call" href="tel:+16137974958">Call 613-797-4958</a>
+      </div>
+      <nav class="switch wrap" aria-label="Site">
+        <a href="index.html#quote" class="is-on" aria-current="page" data-open-quote>Price</a>
+        <a href="work.html">Work</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="wrap">
+          <h1>Torn screens. I come to you.</h1>
+          <p class="lede">
+            Window screens, patio doors, enclosures, boats, RVs, and trailers. Get a starting price, then pick a visit on the day I’m already in your end of Ottawa.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#quote" data-open-quote>Get a price</a>
+            <a class="btn btn-ghost" href="work.html">See the work</a>
+          </div>
+          <p class="trust">
+            <span><b>5.0</b> · 33 Google reviews</span>
+            <span><b>15+</b> years</span>
+            <span><b>$120</b> visit minimum</span>
+          </p>
+        </div>
+      </section>
+
+      <section class="wrap" id="quote">
+        <dialog class="sheet" id="quote-sheet" aria-labelledby="sheet-title">
+          <div class="sheet-handle" data-sheet-handle aria-hidden="true"></div>
+          <div class="sheet-top">
+            <h2 id="sheet-title">Price and a visit</h2>
+            <a class="sheet-call" href="tel:+16137974958">Call</a>
+            <button type="button" class="sheet-close" aria-label="Close quote" data-close-quote>&times;</button>
+          </div>
+          <div class="bot">
+            <h2>Price and a visit</h2>
+            <p class="intro">Four short questions. Starting price uses published rates. I confirm the number before any work starts.</p>
+            <div class="step-bar" id="step-bar" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
+            <div id="panel"></div>
+          </div>
+        </dialog>
+
+        <h2 style="font-size:1.25rem;margin-bottom:4px;">This week’s routes</h2>
+        <p class="fine">I batch jobs by area so I’m not crossing town twice. Starting map — easy to change.</p>
+        <div class="routes">
+          <div class="route"><b>Monday</b><span>South — Manotick, Barrhaven, Riverside South, Greely, Osgoode, Metcalfe, North Gower</span></div>
+          <div class="route"><b>Tuesday</b><span>West — Kanata, Stittsville, Richmond</span></div>
+          <div class="route"><b>Wednesday</b><span>Nepean</span></div>
+          <div class="route"><b>Thursday</b><span>East — Orleans, Gloucester</span></div>
+          <div class="route"><b>Friday</b><span>Central Ottawa</span></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap">
+        <p><a href="tel:+16137974958">613-797-4958</a> · call or text</p>
+        <p><a href="mailto:otownmesh@gmail.com">otownmesh@gmail.com</a></p>
+        <nav class="map" aria-label="Site">
+          <a href="index.html">Home</a>
+          <a href="index.html#quote" data-open-quote>Get a price</a>
+          <a href="work.html">Work & photos</a>
+          <a href="sms:+16137974958">Text a photo</a>
+        </nav>
+        <p class="muted">Mobile within 60 km of Manotick. Premium mesh. 1-year workmanship warranty. Exact price confirmed before work starts.</p>
+      </div>
+    </footer>
+
+    <div class="dock">
+      <a class="btn btn-primary" href="tel:+16137974958">Call now</a>
+      <a class="btn btn-ghost" href="sms:+16137974958" style="color:#fff;box-shadow:inset 0 0 0 1.5px rgba(244,240,232,.45)">Text a photo</a>
+    </div>
+
+    <script>
+      (function () {
+        const PHONE = "613-797-4958";
+        const TEL = "+16137974958";
+        const MAIL = "otownmesh@gmail.com";
+        const AREAS = [
+          { id: "south", label: "South", days: [1], places: "Manotick, Barrhaven, Riverside South, Greely, Osgoode, Metcalfe, North Gower" },
+          { id: "west", label: "West", days: [2], places: "Kanata, Stittsville, Richmond" },
+          { id: "nepean", label: "Nepean", days: [3], places: "Nepean" },
+          { id: "east", label: "East", days: [4], places: "Orleans, Gloucester" },
+          { id: "central", label: "Ottawa centre", days: [5], places: "Ottawa" }
+        ];
+        const SLOTS = [
+          { id: "am", label: "8:30–11:00" },
+          { id: "mid", label: "11:00–2:00" },
+          { id: "pm", label: "2:00–5:00" }
+        ];
+
+        const state = {
+          step: 0,
+          job: null,
+          qty: null,
+          doorKind: null,
+          doorIssue: null,
+          mesh: "standard",
+          area: null,
+          date: null,
+          slot: null,
+          name: "",
+          phone: "",
+          email: "",
+          note: ""
+        };
+
+        const panel = document.getElementById("panel");
+        const bar = document.getElementById("step-bar");
+
+        function setBar(n) {
+          [...bar.children].forEach((el, i) => el.classList.toggle("on", i <= n));
+        }
+        function choice(label, sub, on, fn) {
+          return `<button type="button" class="choice ${on ? "is-on" : ""}">${label}${sub ? `<small>${sub}</small>` : ""}</button>`;
+        }
+
+        function price() {
+          if (state.job === "windows") {
+            const n = state.qty || 1;
+            if (n >= 5) return { kind: "photo", text: "Photo quote", detail: "Five or more windows — text a photo and I’ll price the visit." };
+            const low = Math.max(120, n * 120);
+            return {
+              kind: "range",
+              text: n === 1 ? "from $120" : `from $${low}`,
+              detail: n === 1
+                ? "$120 for one window rescreen, $120 visit minimum."
+                : `${n === 3 ? "3–4 windows, from $360" : n + " × $120 starting = $" + low}. $120 visit minimum.`
+            };
+          }
+          if (state.job === "door") {
+            if (state.doorIssue === "mesh") return { kind: "range", text: "$150–$250", detail: "Mesh-only screen door jobs usually land in this band. Size can move it." };
+            if (state.doorIssue === "frame") return { kind: "range", text: "$250–$500", detail: "Frame, track, or replacement work. I confirm after I see it." };
+            return { kind: "range", text: "$150–$500", detail: "Screen door repair or replacement, depending on size and damage." };
+          }
+          if (state.job === "porch" || state.job === "boat") {
+            return { kind: "photo", text: "Photo quote", detail: "This isn’t a one-price job. Text a photo and I’ll price it before I come." };
+          }
+          return { kind: "none", text: "", detail: "" };
+        }
+
+        function nextDays(area) {
+          const want = area ? area.days : [1, 2, 3, 4, 5];
+          const out = [];
+          const d = new Date();
+          d.setHours(12, 0, 0, 0);
+          for (let i = 1; i <= 21 && out.length < 6; i++) {
+            const t = new Date(d);
+            t.setDate(d.getDate() + i);
+            const wd = t.getDay();
+            if (want.includes(wd)) {
+              const areaMatch = AREAS.find((a) => a.days.includes(wd));
+              out.push({ date: t, area: areaMatch });
+            }
+          }
+          return out;
+        }
+
+        function fmtDay(d) {
+          return d.toLocaleDateString("en-CA", { weekday: "long", month: "short", day: "numeric" });
+        }
+        function isoDate(d) {
+          const y = d.getFullYear();
+          const m = String(d.getMonth() + 1).padStart(2, "0");
+          const da = String(d.getDate()).padStart(2, "0");
+          return `${y}-${m}-${da}`;
+        }
+        function slotTimes(date, slotId) {
+          const startH = slotId === "am" ? 8 : slotId === "mid" ? 11 : 14;
+          const startM = slotId === "am" ? 30 : 0;
+          const endH = slotId === "am" ? 11 : slotId === "mid" ? 14 : 17;
+          const pad = (n) => String(n).padStart(2, "0");
+          const compact = isoDate(date).replace(/-/g, "");
+          const s = `${compact}T${pad(startH)}${pad(startM)}00`;
+          const e = `${compact}T${pad(endH)}0000`;
+          return { s, e, startH, startM, endH };
+        }
+
+        function summary() {
+          const p = price();
+          const area = AREAS.find((a) => a.id === state.area);
+          const jobLabel = {
+            windows: `Window rescreen × ${state.qty || 1}`,
+            door: `Screen door (${state.doorKind || "unspecified"}, ${state.doorIssue || "unspecified"})`,
+            porch: "Patio / porch / enclosure",
+            boat: "Boat, RV, or trailer"
+          }[state.job] || "Screen work";
+          const when = state.date ? `${fmtDay(state.date)} · ${SLOTS.find((s) => s.id === state.slot)?.label || ""}` : "not picked";
+          return [
+            `Job: ${jobLabel}`,
+            `Mesh: ${state.mesh}`,
+            `Area: ${area ? area.label + " — " + area.places : ""}`,
+            `Visit: ${when}`,
+            `Starting price: ${p.text}`,
+            `Name: ${state.name}`,
+            `Phone: ${state.phone}`,
+            state.email ? `Email: ${state.email}` : "",
+            state.note ? `Note: ${state.note}` : "",
+            "Price is a starting number from published rates. Confirm before work. Customer will text a photo to 613-797-4958 to lock it."
+          ].filter(Boolean).join("\n");
+        }
+
+        function goMail() {
+          const sub = encodeURIComponent(`Screen visit request — ${state.name} — ${isoDate(state.date)}`);
+          const body = encodeURIComponent(summary());
+          location.href = `mailto:${MAIL}?subject=${sub}&body=${body}`;
+        }
+
+        function goCal() {
+          const t = slotTimes(state.date, state.slot);
+          const title = encodeURIComponent(`The Screen Guy — ${state.name}`);
+          const details = encodeURIComponent(summary());
+          const loc = encodeURIComponent(AREAS.find((a) => a.id === state.area)?.places || "Ottawa");
+          window.open(
+            `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${t.s}/${t.e}&details=${details}&location=${loc}`,
+            "_blank"
+          );
+        }
+
+        function goIcs() {
+          const t = slotTimes(state.date, state.slot);
+          const uid = `${Date.now()}@thescreenguy`;
+          const ics = [
+            "BEGIN:VCALENDAR",
+            "VERSION:2.0",
+            "PRODID:-//The Screen Guy//Visit//EN",
+            "BEGIN:VEVENT",
+            `UID:${uid}`,
+            `DTSTAMP:${t.s}Z`,
+            `DTSTART;TZID=America/Toronto:${t.s}`,
+            `DTEND;TZID=America/Toronto:${t.e}`,
+            `SUMMARY:The Screen Guy — ${state.name}`,
+            `DESCRIPTION:${summary().replace(/\n/g, "\\n")}`,
+            `LOCATION:${AREAS.find((a) => a.id === state.area)?.places || "Ottawa"}`,
+            "END:VEVENT",
+            "END:VCALENDAR"
+          ].join("\r\n");
+          const blob = new Blob([ics], { type: "text/calendar" });
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = `screen-guy-${isoDate(state.date)}.ics`;
+          a.click();
+        }
+
+        function render() {
+          setBar(state.step);
+          if (state.step === 0) {
+            panel.innerHTML = `
+              <p class="q">What’s torn?</p>
+              <div class="choices">
+                ${choice("Window screens", "Rescreen existing frames, from $120 each", state.job === "windows")}
+                ${choice("Screen door", "Sliding or hinged, $150–$500", state.job === "door")}
+                ${choice("Patio, porch, enclosure", "Needs a photo", state.job === "porch")}
+                ${choice("Boat, RV, or trailer", "Needs a photo", state.job === "boat")}
+              </div>`;
+            [...panel.querySelectorAll(".choice")].forEach((btn, i) => {
+              const ids = ["windows", "door", "porch", "boat"];
+              btn.onclick = () => { state.job = ids[i]; state.step = 1; render(); };
+            });
+            return;
+          }
+
+          if (state.step === 1) {
+            if (state.job === "windows") {
+              panel.innerHTML = `
+                <p class="q">How many windows?</p>
+                <div class="choices">
+                  ${choice("1", "from $120", state.qty === 1)}
+                  ${choice("2", "from $240", state.qty === 2)}
+                  ${choice("3–4", "from $360", state.qty === 3)}
+                  ${choice("5 or more", "I’ll price after a photo", state.qty === 5)}
+                </div>
+                <p class="q" style="margin-top:16px">Mesh</p>
+                <div class="choices">
+                  ${choice("Standard premium", "What I usually install", state.mesh === "standard")}
+                  ${choice("Pet-resistant", "Priced after I see the opening", state.mesh === "pet")}
+                  ${choice("Solar / sun-blocking", "Priced after I see the opening", state.mesh === "solar")}
+                </div>
+                <div class="nav-row"><button type="button" class="btn btn-ghost" id="back">Back</button></div>`;
+              const qtys = [1, 2, 3, 5];
+              [...panel.querySelectorAll(".choices")[0].querySelectorAll(".choice")].forEach((btn, i) => {
+                btn.onclick = () => { state.qty = qtys[i]; render(); };
+              });
+              ["standard", "pet", "solar"].forEach((id, i) => {
+                panel.querySelectorAll(".choices")[1].querySelectorAll(".choice")[i].onclick = () => { state.mesh = id; render(); };
+              });
+              panel.querySelector("#back").onclick = () => { state.step = 0; render(); };
+              if (state.qty) {
+                const row = panel.querySelector(".nav-row");
+                const n = document.createElement("button");
+                n.className = "btn btn-primary";
+                n.textContent = "Next";
+                n.onclick = () => { state.step = 2; render(); };
+                row.appendChild(n);
+              }
+              return;
+            }
+            if (state.job === "door") {
+              panel.innerHTML = `
+                <p class="q">What kind of door?</p>
+                <div class="choices">
+                  ${choice("Sliding", "", state.doorKind === "sliding")}
+                  ${choice("Hinged", "", state.doorKind === "hinged")}
+                </div>
+                <p class="q" style="margin-top:16px">What’s wrong?</p>
+                <div class="choices">
+                  ${choice("Mesh torn — frame is fine", "$150–$250 starting", state.doorIssue === "mesh")}
+                  ${choice("Frame, track, or needs replacing", "$250–$500 starting", state.doorIssue === "frame")}
+                </div>
+                <div class="nav-row"><button type="button" class="btn btn-ghost" id="back">Back</button></div>`;
+              panel.querySelectorAll(".choices")[0].querySelectorAll(".choice")[0].onclick = () => { state.doorKind = "sliding"; render(); };
+              panel.querySelectorAll(".choices")[0].querySelectorAll(".choice")[1].onclick = () => { state.doorKind = "hinged"; render(); };
+              panel.querySelectorAll(".choices")[1].querySelectorAll(".choice")[0].onclick = () => { state.doorIssue = "mesh"; render(); };
+              panel.querySelectorAll(".choices")[1].querySelectorAll(".choice")[1].onclick = () => { state.doorIssue = "frame"; render(); };
+              panel.querySelector("#back").onclick = () => { state.step = 0; render(); };
+              if (state.doorKind && state.doorIssue) {
+                const n = document.createElement("button");
+                n.className = "btn btn-primary";
+                n.textContent = "Next";
+                n.onclick = () => { state.step = 2; render(); };
+                panel.querySelector(".nav-row").appendChild(n);
+              }
+              return;
+            }
+            panel.innerHTML = `
+              <p class="q">This one needs a photo.</p>
+              <p class="intro">Porches, enclosures, boats, RVs and trailers aren’t a one-number job. Text a picture to ${PHONE} and I’ll price it, then we pick a day.</p>
+              <div class="nav-row">
+                <button type="button" class="btn btn-ghost" id="back">Back</button>
+                <a class="btn btn-primary" href="sms:${TEL}">Text a photo</a>
+              </div>`;
+            panel.querySelector("#back").onclick = () => { state.step = 0; render(); };
+            return;
+          }
+
+          if (state.step === 2) {
+            panel.innerHTML = `
+              <p class="q">Where are you?</p>
+              <div class="choices one">
+                ${AREAS.map((a) => choice(a.label, a.places + " · " + ["", "Mondays", "Tuesdays", "Wednesdays", "Thursdays", "Fridays"][a.days[0]], state.area === a.id)).join("")}
+              </div>
+              <div class="nav-row"><button type="button" class="btn btn-ghost" id="back">Back</button></div>`;
+            [...panel.querySelectorAll(".choice")].forEach((btn, i) => {
+              btn.onclick = () => { state.area = AREAS[i].id; state.date = null; state.slot = null; render(); };
+            });
+            panel.querySelector("#back").onclick = () => { state.step = 1; render(); };
+            if (state.area) {
+              const n = document.createElement("button");
+              n.className = "btn btn-primary";
+              n.textContent = "Pick a day";
+              n.onclick = () => { state.step = 3; render(); };
+              panel.querySelector(".nav-row").appendChild(n);
+            }
+            return;
+          }
+
+          if (state.step === 3) {
+            const area = AREAS.find((a) => a.id === state.area);
+            const days = nextDays(area);
+            const p = price();
+            panel.innerHTML = `
+              <div class="estimate">
+                <div class="k">Starting price</div>
+                <div class="n">${p.text}</div>
+                <p>${p.detail} Exact price confirmed before any work starts.</p>
+              </div>
+              <p class="q">Next ${area.label} days</p>
+              <div class="days">
+                ${days.map((d, i) => `<button type="button" class="day ${state.date && isoDate(state.date) === isoDate(d.date) ? "is-on" : ""}">${fmtDay(d.date)}<small>${d.area.places}</small></button>`).join("")}
+              </div>
+              <div class="slots" id="slots"></div>
+              <div class="field" style="margin-top:16px"><label for="nm">Name</label><input id="nm" autocomplete="name" value="${state.name}" /></div>
+              <div class="field"><label for="ph">Phone</label><input id="ph" type="tel" autocomplete="tel" inputmode="tel" value="${state.phone}" /></div>
+              <div class="field"><label for="em">Email <span class="hint">(optional)</span></label><input id="em" type="email" autocomplete="email" value="${state.email}" /></div>
+              <div class="field"><label for="nt">Anything I should know?</label><textarea id="nt">${state.note}</textarea></div>
+              <p class="err" id="err" hidden>Pick a day, a time window, and leave a name and phone.</p>
+              <div class="nav-row">
+                <button type="button" class="btn btn-ghost" id="back">Back</button>
+                <button type="button" class="btn btn-primary" id="hold">Hold this visit</button>
+              </div>`;
+            [...panel.querySelectorAll(".day")].forEach((btn, i) => {
+              btn.onclick = () => { state.date = days[i].date; render(); };
+            });
+            const slotBox = panel.querySelector("#slots");
+            if (state.date) {
+              SLOTS.forEach((s) => {
+                const b = document.createElement("button");
+                b.type = "button";
+                b.textContent = s.label;
+                if (state.slot === s.id) b.classList.add("is-on");
+                b.onclick = () => { state.slot = s.id; render(); };
+                slotBox.appendChild(b);
+              });
+            }
+            const bind = (id, key) => { const el = panel.querySelector(id); el.addEventListener("input", () => { state[key] = el.value; }); };
+            bind("#nm", "name"); bind("#ph", "phone"); bind("#em", "email"); bind("#nt", "note");
+            panel.querySelector("#back").onclick = () => { state.step = 2; render(); };
+            panel.querySelector("#hold").onclick = () => {
+              state.name = panel.querySelector("#nm").value.trim();
+              state.phone = panel.querySelector("#ph").value.trim();
+              state.email = panel.querySelector("#em").value.trim();
+              state.note = panel.querySelector("#nt").value.trim();
+              if (!state.date || !state.slot || !state.name || !state.phone) {
+                panel.querySelector("#err").hidden = false;
+                return;
+              }
+              state.step = 4;
+              render();
+            };
+            return;
+          }
+
+          const p = price();
+          const area = AREAS.find((a) => a.id === state.area);
+          panel.innerHTML = `
+            <div class="estimate">
+              <div class="k">Visit held as a request</div>
+              <div class="n">${p.text}</div>
+              <p>${fmtDay(state.date)} · ${SLOTS.find((s) => s.id === state.slot).label}<br>${area.places}</p>
+            </div>
+            <div class="lock">
+              <p>To lock the price, text a photo of the screen to ${PHONE}.</p>
+            </div>
+            <p class="intro">This is a visit request, not a live calendar lock. I’ll confirm by text. Starting price uses published rates — I confirm before any work starts, no surprises.</p>
+            <div class="choices one">
+              <a class="btn btn-primary" href="sms:${TEL}">Text the photo now</a>
+              <button type="button" class="btn btn-ghost" id="mail">Email me the request</button>
+              <button type="button" class="btn btn-ghost" id="gcal">Add to Google Calendar</button>
+              <button type="button" class="btn btn-ghost" id="ics">Download .ics</button>
+            </div>
+            <p class="fine" style="margin-top:14px">Put the .ics on a calendar named The Screen Guy Jobs (use the business Gmail). Don’t drop customer jobs on a personal calendar.</p>
+            <div class="nav-row" style="margin-top:16px">
+              <button type="button" class="btn btn-ghost" id="again">New request</button>
+            </div>`;
+          panel.querySelector("#mail").onclick = goMail;
+          panel.querySelector("#gcal").onclick = goCal;
+          panel.querySelector("#ics").onclick = goIcs;
+          panel.querySelector("#again").onclick = () => {
+            state.step = 0; state.job = null; state.qty = null; state.doorKind = null; state.doorIssue = null;
+            state.mesh = "standard"; state.area = null; state.date = null; state.slot = null;
+            render();
+          };
+        }
+
+        function placeSheet() {
+          const sheetEl = document.getElementById("quote-sheet");
+          if (!sheetEl) return;
+          const mobile = window.matchMedia("(max-width: 719px)").matches;
+          if (!mobile) {
+            try {
+              if (sheetEl.open && sheetEl.matches && sheetEl.matches(":modal")) sheetEl.close();
+            } catch (err) {}
+            if (!sheetEl.open) {
+              try { sheetEl.show(); } catch (err) {}
+            }
+            document.body.classList.remove("sheet-open");
+          }
+        }
+
+        function openQuote(ev) {
+          const sheetEl = document.getElementById("quote-sheet");
+          if (!window.matchMedia("(max-width: 719px)").matches) return;
+          if (ev) ev.preventDefault();
+          if (sheetEl && !sheetEl.open) sheetEl.showModal();
+          document.body.classList.add("sheet-open");
+        }
+
+        function closeQuote() {
+          const sheetEl = document.getElementById("quote-sheet");
+          if (sheetEl && sheetEl.open) sheetEl.close();
+          document.body.classList.remove("sheet-open");
+        }
+
+        document.querySelectorAll("[data-open-quote]").forEach((el) => {
+          el.addEventListener("click", openQuote);
+        });
+        document.querySelector("[data-close-quote]")?.addEventListener("click", closeQuote);
+        const sheetEl = document.getElementById("quote-sheet");
+        sheetEl?.addEventListener("close", () => document.body.classList.remove("sheet-open"));
+
+        const handle = document.querySelector("[data-sheet-handle]");
+        if (handle && sheetEl) {
+          let y0 = 0;
+          handle.addEventListener("touchstart", (e) => { y0 = e.touches[0].clientY; }, { passive: true });
+          handle.addEventListener("touchmove", (e) => {
+            const dy = e.touches[0].clientY - y0;
+            if (dy > 0) sheetEl.style.transform = "translateY(" + dy + "px)";
+          }, { passive: true });
+          handle.addEventListener("touchend", (e) => {
+            const dy = e.changedTouches[0].clientY - y0;
+            sheetEl.style.transform = "";
+            if (dy > 80) closeQuote();
+          });
+        }
+
+        window.addEventListener("hashchange", () => {
+          if (location.hash === "#quote") openQuote();
+        });
+        window.matchMedia("(max-width: 719px)").addEventListener("change", placeSheet);
+        placeSheet();
+        if (location.hash === "#quote") openQuote();
+
+        render();
+      })();
+    </script>
+  </body>
+</html>
