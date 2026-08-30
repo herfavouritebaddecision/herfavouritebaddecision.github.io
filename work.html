@@ -376,7 +376,7 @@
         box-shadow: 0 1px 0 rgba(244, 240, 232, 0.08);
       }
 
-      .site-header .wrap {
+      .site-header .bar {
         height: var(--header-h);
         display: flex;
         align-items: center;
@@ -462,14 +462,18 @@
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 6px;
+        width: min(100% - (var(--gutter) * 2), var(--wrap));
+        margin-inline: auto;
         padding: 0 0 10px;
+        box-sizing: border-box;
       }
       .switch a {
         min-height: 44px;
+        width: 100%;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 999px;
+        border-radius: 12px;
         text-decoration: none;
         font-weight: 650;
         font-size: 0.92rem;
@@ -1461,7 +1465,7 @@
         }
 
         .switch {
-          width: 240px;
+          width: min(100% - (var(--gutter) * 2), 420px);
           margin-left: auto;
           margin-right: auto;
         }
@@ -1747,7 +1751,7 @@
     <a class="skip" href="#main">Skip to content</a>
 
     <header class="site-header">
-      <div class="wrap">
+      <div class="wrap bar">
         <a class="brand" href="index.html" aria-label="The Screen Guy — home">
           <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
             <rect width="32" height="32" rx="5" fill="#F4F0E8" />
